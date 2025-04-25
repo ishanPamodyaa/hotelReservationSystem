@@ -303,7 +303,7 @@ public class RoomManagementController implements Initializable {
                 return;
             }
             
-            String sql = "INSERT INTO rooms (room_number, room_type, price, status) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO rooms (room_number, room_type, price_per_night, availability_status) VALUES (?, ?, ?, ?)";
             statement = connection.prepareStatement(sql);
             statement.setString(1, roomNumber);
             statement.setString(2, type.toString());
@@ -342,7 +342,7 @@ public class RoomManagementController implements Initializable {
                 return;
             }
             
-            String sql = "UPDATE rooms SET room_number = ?, room_type = ?, price = ?, status = ? WHERE room_id = ?";
+            String sql = "UPDATE rooms SET room_number = ?, room_type = ?, price_per_night = ?, availability_status = ? WHERE room_id = ?";
             statement = connection.prepareStatement(sql);
             statement.setString(1, roomNumber);
             statement.setString(2, type.toString());
@@ -422,7 +422,7 @@ public class RoomManagementController implements Initializable {
                 return;
             }
             
-            String sql = "SELECT * FROM rooms WHERE status = ?";
+            String sql = "SELECT * FROM rooms WHERE availability_status = ?";
             statement = connection.prepareStatement(sql);
             statement.setString(1, status.toString());
             resultSet = statement.executeQuery();
@@ -431,8 +431,8 @@ public class RoomManagementController implements Initializable {
                 int id = resultSet.getInt("room_id");
                 String roomNumber = resultSet.getString("room_number");
                 RoomType type = RoomType.valueOf(resultSet.getString("room_type"));
-                double price = resultSet.getDouble("price");
-                RoomStatus roomStatus = RoomStatus.valueOf(resultSet.getString("status"));
+                double price = resultSet.getDouble("price_per_night");
+                RoomStatus roomStatus = RoomStatus.valueOf(resultSet.getString("availability_status"));
                 
                 Room room = new Room(id, roomNumber, type, price, roomStatus);
                 roomList.add(room);
@@ -475,8 +475,8 @@ public class RoomManagementController implements Initializable {
                 int id = resultSet.getInt("room_id");
                 String roomNumber = resultSet.getString("room_number");
                 RoomType type = RoomType.valueOf(resultSet.getString("room_type"));
-                double price = resultSet.getDouble("price");
-                RoomStatus status = RoomStatus.valueOf(resultSet.getString("status"));
+                double price = resultSet.getDouble("price_per_night");
+                RoomStatus status = RoomStatus.valueOf(resultSet.getString("availability_status"));
                 
                 Room room = new Room(id, roomNumber, type, price, status);
                 roomList.add(room);
