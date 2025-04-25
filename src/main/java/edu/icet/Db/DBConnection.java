@@ -1,23 +1,47 @@
 package edu.icet.Db;
 
-import lombok.Getter;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBConnection {
-
     private static DBConnection instance;
-    @Getter
     private Connection connection;
-    private DBConnection() throws SQLException {
-        String URL = "jdbc:mysql://localhost:3306/hotel_reservation_sys_db";
-        String userName = "root";
-        String password = "root";
-        connection = DriverManager.getConnection(URL,userName,password);
+    
+    private String url = "jdbc:mysql://localhost:3306/hotel_reservation_sys_db";
+    private String username = "root";
+    private String password = "root";
+    
+    // Private constructor
+    private DBConnection() {
+        try {
+            connection = DriverManager.getConnection(url, username, password);
+            System.out.println("Database connected successfully");
+        } catch (SQLException e) {
+            System.out.println("Database connection error: " + e.getMessage());
+        }
     }
-    public static DBConnection getInstance() throws SQLException {
-        return  instance==null? instance = new DBConnection():instance;
+    
+    // Get the instance (singleton pattern)
+    public static DBConnection getInstance() {
+        if (instance == null) {
+            instance = new DBConnection();
+        }
+        return instance;
+    }
+    
+    // Get a connection that works
+    public Connection getConnection() {
+        try {
+            // Check if connection is closed or invalid
+            if (connection == null || connection.isClosed()) {
+                // Create a new connection
+                connection = DriverManager.getConnection(url, username, password);
+                System.out.println("Database connection renewed");
+            }
+        } catch (SQLException e) {
+            System.out.println("Database connection error: " + e.getMessage());
+        }
+        return connection;
     }
 }

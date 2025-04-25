@@ -114,7 +114,7 @@ public class DashboardController implements Initializable {
     }
     
     private void populatePlaceholderData() {
-        // Recent reservations placeholder
+
         for (int i = 1; i <= 3; i++) {
             Label label = new Label("Reservation #" + (1000 + i) + " - John Doe - Room " + (100 + i) + " - " + i + " day(s)");
             recentReservationsContainer.getChildren().add(label);
@@ -139,13 +139,13 @@ public class DashboardController implements Initializable {
         }
     }
 
-    // Method to load different content panes based on button clicks
+
     private void loadContentPane(String fxmlPath, String title) {
         try {
-            // Set the title for the content area
+
             contentTitle.setText(title);
             
-            // Load the FXML if it exists, otherwise just show a placeholder
+
             try {
                 URL fxmlUrl = getClass().getResource(fxmlPath);
                 if (fxmlUrl != null) {

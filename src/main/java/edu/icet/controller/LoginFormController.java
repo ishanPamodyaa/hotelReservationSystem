@@ -59,44 +59,65 @@ public class LoginFormController implements Initializable {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
-        String sql = "SELECT * FROM users WHERE username = ?";
-        try (Connection connection = DBConnection.getInstance().getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql)) {
-
-            stmt.setString(1, username);
-            try (ResultSet resultSet = stmt.executeQuery()) {
-                if (resultSet.next()) {
-                    String storedHash =resultSet.getString("password_hash");
-                    if (BCrypt.checkpw(password, storedHash)) {
-                        Role role = Role.valueOf(resultSet.getString(4));
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Dashboard.fxml"));
-                        Parent root = loader.load();
-
-                        DashboardController dashboardController = loader.getController();
-                        dashboardController.setLoggedInUser(role);
-
-                        Stage stage = (Stage) loginButton.getScene().getWindow();
-                        stage.setScene(new Scene(root));
-                        stage.setTitle("Hotel Reservation System - Dashboard");
-                        stage.show();
-
-                    } else {
-                        showError("Invalid username or password.");
-                    }
-                } else {
-                    showError("User not found.");
-                }
-            } catch (IOException e) {
-                System.err.println("Error loading dashboard: " + e.getMessage());
-                e.printStackTrace();
-                showError("Could not load dashboard. Please try again.");
-            }
-
-        }catch (SQLException e) {
-            e.printStackTrace();
-            showError("Database error.");
+        if (!isValidLogin(username, password)) {
+            showError("Please enter username and password");
+            return;
         }
 
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        ResultSet resultSet = null;
+        
+        try {
+            connection = DBConnection.getInstance().getConnection();
+            if (connection == null) {
+                showError("Unable to connect to database. Please try again later.");
+                return;
+            }
+            
+            String sql = "SELECT * FROM users WHERE username = ?";
+            stmt = connection.prepareStatement(sql);
+            stmt.setString(1, username);
+            resultSet = stmt.executeQuery();
+            
+            if (resultSet.next()) {
+                String storedHash = resultSet.getString("password_hash");
+                if (BCrypt.checkpw(password, storedHash)) {
+                    Role role = Role.valueOf(resultSet.getString("role"));
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Dashboard.fxml"));
+                    Parent root = loader.load();
+
+                    DashboardController dashboardController = loader.getController();
+                    dashboardController.setLoggedInUser(role);
+
+                    Stage stage = (Stage) loginButton.getScene().getWindow();
+                    stage.setScene(new Scene(root));
+                    stage.setTitle("Hotel Reservation System - Dashboard");
+                    stage.show();
+
+                } else {
+                    showError("Invalid username or password.");
+                }
+            } else {
+                showError("User not found.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showError("Database error: " + e.getMessage());
+        } catch (IOException e) {
+            System.err.println("Error loading dashboard: " + e.getMessage());
+            e.printStackTrace();
+            showError("Could not load dashboard. Please try again.");
+        } finally {
+            // Close resources in reverse order of creation
+            try {
+                if (resultSet != null) resultSet.close();
+                if (stmt != null) stmt.close();
+                // We don't close the connection here as it's managed by DBConnection
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private boolean isValidLogin(String username, String password) {
