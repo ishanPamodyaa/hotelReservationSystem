@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="720.0" prefWidth="920.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="edu.icet.controller.ReservationManagementController">
+    <VBox spacing="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="10" AnchorPane.bottomAnchor="10">
+        <Label text="Reservation Management">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Label>
+        
+        <!-- Form Section -->
+        <GridPane hgap="10" vgap="10" style="-fx-background-color: #f8f9fa; -fx-background-radius: 10;">
+            <padding>
+                <Insets bottom="20" left="20" right="20" top="20"/>
+            </padding>
+
+            <!-- Customer Selection -->
+            <Label text="Customer:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <ComboBox fx:id="customerComboBox" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+            <!-- Room Type Selection -->
+            <Label text="Room Type:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <ComboBox fx:id="roomTypeComboBox" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+            <!-- Room Selection -->
+            <Label text="Room:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+            <ComboBox fx:id="roomComboBox" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+            <!-- Check-in Date -->
+            <Label text="Check-in Date:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+            <DatePicker fx:id="checkInDatePicker" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+            <!-- Check-out Date -->
+            <Label text="Check-out Date:" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
+            <DatePicker fx:id="checkOutDatePicker" prefWidth="200" GridPane.columnIndex="3" GridPane.rowIndex="3"/>
+
+            <!-- Number of Guests -->
+            <Label text="Number of Guests:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+            <TextField fx:id="numGuestsField" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+            <!-- Total Price -->
+            <Label text="Total Price:" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
+            <TextField fx:id="totalPriceField" editable="false" prefWidth="200" GridPane.columnIndex="3" GridPane.rowIndex="4"/>
+
+            <!-- Reservation Status -->
+            <Label text="Reservation Status:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+            <ComboBox fx:id="statusComboBox" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+            <!-- Payment Status -->
+            <Label text="Payment Status:" GridPane.columnIndex="2" GridPane.rowIndex="5"/>
+            <ComboBox fx:id="paymentStatusComboBox" prefWidth="200" GridPane.columnIndex="3" GridPane.rowIndex="5"/>
+
+            <!-- Special Requests -->
+            <Label text="Special Requests:" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+            <TextArea fx:id="specialRequestsArea" prefHeight="60" prefWidth="200" wrapText="true" 
+                      GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="6"/>
+
+            <columnConstraints>
+                <ColumnConstraints minWidth="100"/>
+                <ColumnConstraints minWidth="200"/>
+                <ColumnConstraints minWidth="100"/>
+                <ColumnConstraints minWidth="200"/>
+            </columnConstraints>
+        </GridPane>
+
+        <!-- Buttons Section -->
+        <HBox spacing="10">
+            <Button text="Save" onAction="#handleSave" style="-fx-background-color: #28a745;" textFill="WHITE">
+                <font>
+                    <Font name="System Bold" size="14.0" />
+                </font>
+            </Button>
+            <Button text="Clear" onAction="#handleClear" style="-fx-background-color: #6c757d;" textFill="WHITE">
+                <font>
+                    <Font name="System Bold" size="14.0" />
+                </font>
+            </Button>
+            <Button text="Refresh" onAction="#handleRefresh" style="-fx-background-color: #17a2b8;" textFill="WHITE">
+                <font>
+                    <Font name="System Bold" size="14.0" />
+                </font>
+            </Button>
+            <Label fx:id="messageLabel"/>
+        </HBox>
+
+        <!-- Search Section -->
+        <HBox spacing="10" style="-fx-background-color: #f8f9fa; -fx-background-radius: 10; -fx-padding: 10;">
+            <Label text="Search:"/>
+            <TextField fx:id="searchField" promptText="Search reservations..." HBox.hgrow="ALWAYS"/>
+        </HBox>
+
+        <!-- Table Section -->
+        <TableView fx:id="reservationTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
+                <TableColumn fx:id="customerColumn" text="Customer" prefWidth="150"/>
+                <TableColumn fx:id="roomColumn" text="Room" prefWidth="80"/>
+                <TableColumn fx:id="roomTypeColumn" text="Room Type" prefWidth="100"/>
+                <TableColumn fx:id="priceColumn" text="Price" prefWidth="80"/>
+                <TableColumn fx:id="checkInColumn" text="Check-in" prefWidth="100"/>
+                <TableColumn fx:id="checkOutColumn" text="Check-out" prefWidth="100"/>
+                <TableColumn fx:id="statusColumn" text="Status" prefWidth="100"/>
+                <TableColumn fx:id="actionColumn" text="Actions" prefWidth="120"/>
+            </columns>
+        </TableView>
+    </VBox>
+</AnchorPane> 

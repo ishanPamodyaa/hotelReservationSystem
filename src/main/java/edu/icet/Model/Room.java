@@ -10,9 +10,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Room {
-    private Integer id;
+    private int roomId;
     private String roomNumber;
-    private RoomType type;
-    private Double price;
+    private RoomType roomType;
+    private double pricePerNight;
     private RoomStatus status;
+    private int capacity;
+    private String description;
+
+    // Constructor for table view
+    public Room(int roomId, String roomNumber, RoomType roomType, double pricePerNight, RoomStatus status) {
+        this.roomId = roomId;
+        this.roomNumber = roomNumber;
+        this.roomType = roomType;
+        this.pricePerNight = pricePerNight;
+        this.status = status;
+    }
 } 
