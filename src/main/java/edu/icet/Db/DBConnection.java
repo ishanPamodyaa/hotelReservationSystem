@@ -12,7 +12,7 @@ public class DBConnection {
     private String username = "root";
     private String password = "root";
     
-    // Private constructor
+
     private DBConnection() {
         try {
             connection = DriverManager.getConnection(url, username, password);
@@ -33,7 +33,6 @@ public class DBConnection {
     // Get a connection that works
     public Connection getConnection() {
         try {
-            // Check if connection is closed or invalid
             if (connection == null || connection.isClosed()) {
                 // Create a new connection
                 connection = DriverManager.getConnection(url, username, password);
