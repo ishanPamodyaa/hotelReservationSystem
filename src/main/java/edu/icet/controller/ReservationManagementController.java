@@ -3,7 +3,7 @@ package edu.icet.controller;
 import edu.icet.Model.Customer;
 import edu.icet.Model.Reservation;
 import edu.icet.Model.Room;
-import edu.icet.Model.RoomType;
+import edu.icet.Utill.RoomType;
 import edu.icet.Repocitory.CustomerRepository;
 import edu.icet.Repocitory.ReservationRepository;
 import edu.icet.Repocitory.RoomRepository;
@@ -167,14 +167,14 @@ public class ReservationManagementController implements Initializable {
         
         customerColumn.setCellValueFactory(cellData -> {
             Reservation reservation = cellData.getValue();
-            Customer customer = reservation.getCustomer();
-            return new SimpleStringProperty(customer != null ? customer.getName() : "");
+            System.out.println("Reservation: " + reservation);
+            return new SimpleStringProperty(reservation != null ? reservation.getCustomerName() : "");
         });
         
         roomColumn.setCellValueFactory(cellData -> {
             Reservation reservation = cellData.getValue();
-            Room room = reservation.getRoom();
-            return new SimpleStringProperty(room != null ? "Room " + room.getRoomNumber() : "");
+           
+            return new SimpleStringProperty(reservation != null ? "Room " + reservation.getRoomNumber() : "");
         });
 
         roomTypeColumn.setCellValueFactory(cellData -> {
@@ -307,14 +307,25 @@ public class ReservationManagementController implements Initializable {
             }
 
             reservation.setCustomer(customerComboBox.getValue());
+            System.out.println("Customer: " + reservation.getCustomer());
             reservation.setRoom(roomComboBox.getValue());
+            System.out.println("Room: " + reservation.getRoom());
             reservation.setCheckInDate(checkInDatePicker.getValue());
+            System.out.println("Check-in Date: " + reservation.getCheckInDate());
             reservation.setCheckOutDate(checkOutDatePicker.getValue());
+            System.out.println("Check-out Date: " + reservation.getCheckOutDate());
             reservation.setNumGuests(Integer.parseInt(numGuestsField.getText()));
+            System.out.println("Number of Guests: " + reservation.getNumGuests());
             reservation.setTotalPrice(Double.parseDouble(totalPriceField.getText()));
+            System.out.println("Total Price: " + reservation.getTotalPrice());
             reservation.setStatus(statusComboBox.getValue());
+            System.out.println("Status: " + reservation.getStatus());
             reservation.setPaymentStatus(paymentStatusComboBox.getValue());
+            System.out.println("Payment Status: " + reservation.getPaymentStatus());
             reservation.setSpecialRequests(specialRequestsArea.getText());
+            System.out.println("Special Requests: " + reservation.getSpecialRequests());
+
+            System.out.println("Reservation: " + reservation);
 
             // Check room availability
             if (!reservationRepository.isRoomAvailable(

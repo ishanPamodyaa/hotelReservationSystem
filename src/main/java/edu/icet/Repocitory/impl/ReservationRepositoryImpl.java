@@ -2,14 +2,21 @@ package edu.icet.Repocitory.impl;
 
 import edu.icet.Db.DBConnection;
 import edu.icet.Model.Reservation;
+import edu.icet.Model.Room;
+import edu.icet.Utill.RoomType;
 import edu.icet.Repocitory.ReservationRepository;
 import edu.icet.Utill.PaymentStatus;
 import edu.icet.Utill.ReservationStatus;
+import edu.icet.Utill.HibernateUtil;
 
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 public class ReservationRepositoryImpl implements ReservationRepository {
 
@@ -25,15 +32,24 @@ public class ReservationRepositoryImpl implements ReservationRepository {
                         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             stmt = connection.prepareStatement(sql);
             
-            stmt.setInt(1, reservation.getCustomerId());
-            stmt.setInt(2, reservation.getRoomId());
+            stmt.setInt(1, reservation.getCustomer().getCustomerId());
+            System.out.println("Customer ID: " + reservation.getCustomer().getCustomerId());
+            stmt.setInt(2, reservation.getRoom().getRoomId());
+            System.out.println("Room ID: " + reservation.getRoom().getRoomId());
             stmt.setDate(3, Date.valueOf(reservation.getCheckInDate()));
+            System.out.println("Check-in Date: " + reservation.getCheckInDate());
             stmt.setDate(4, Date.valueOf(reservation.getCheckOutDate()));
+            System.out.println("Check-out Date: " + reservation.getCheckOutDate());
             stmt.setInt(5, reservation.getNumGuests());
+            System.out.println("Number of Guests: " + reservation.getNumGuests());
             stmt.setDouble(6, reservation.getTotalPrice());
+            System.out.println("Total Price: " + reservation.getTotalPrice());
             stmt.setString(7, reservation.getStatus().toString());
+            System.out.println("Status: " + reservation.getStatus().toString());
             stmt.setString(8, reservation.getPaymentStatus().toString());
+            System.out.println("Payment Status: " + reservation.getPaymentStatus().toString());
             stmt.setString(9, reservation.getSpecialRequests());
+            System.out.println("Special Requests: " + reservation.getSpecialRequests());
             
             return stmt.executeUpdate() > 0;
             
@@ -119,7 +135,7 @@ public class ReservationRepositoryImpl implements ReservationRepository {
         
         try {
             connection = DBConnection.getInstance().getConnection();
-            String sql = "SELECT r.*, c.name as customer_name, rm.room_number " +
+            String sql = "SELECT r.*, c.name as customer_name, rm.room_number, rm.room_type, rm.price_per_night " +
                         "FROM reservations r " +
                         "JOIN customers c ON r.customer_id = c.customer_id " +
                         "JOIN rooms rm ON r.room_id = rm.room_id " +
@@ -155,7 +171,7 @@ public class ReservationRepositoryImpl implements ReservationRepository {
         
         try {
             connection = DBConnection.getInstance().getConnection();
-            String sql = "SELECT r.*, c.name as customer_name, rm.room_number " +
+            String sql = "SELECT r.*, c.name as customer_name, rm.room_number, rm.room_type, rm.price_per_night " +
                         "FROM reservations r " +
                         "JOIN customers c ON r.customer_id = c.customer_id " +
                         "JOIN rooms rm ON r.room_id = rm.room_id " +
@@ -190,7 +206,7 @@ public class ReservationRepositoryImpl implements ReservationRepository {
         
         try {
             connection = DBConnection.getInstance().getConnection();
-            String sql = "SELECT r.*, c.name as customer_name, rm.room_number " +
+            String sql = "SELECT r.*, c.name as customer_name, rm.room_number, rm.room_type, rm.price_per_night " +
                         "FROM reservations r " +
                         "JOIN customers c ON r.customer_id = c.customer_id " +
                         "JOIN rooms rm ON r.room_id = rm.room_id " +
@@ -227,7 +243,7 @@ public class ReservationRepositoryImpl implements ReservationRepository {
         
         try {
             connection = DBConnection.getInstance().getConnection();
-            String sql = "SELECT r.*, c.name as customer_name, rm.room_number " +
+            String sql = "SELECT r.*, c.name as customer_name, rm.room_number, rm.room_type, rm.price_per_night " +
                         "FROM reservations r " +
                         "JOIN customers c ON r.customer_id = c.customer_id " +
                         "JOIN rooms rm ON r.room_id = rm.room_id " +
@@ -264,7 +280,7 @@ public class ReservationRepositoryImpl implements ReservationRepository {
         
         try {
             connection = DBConnection.getInstance().getConnection();
-            String sql = "SELECT r.*, c.name as customer_name, rm.room_number " +
+            String sql = "SELECT r.*, c.name as customer_name, rm.room_number, rm.room_type, rm.price_per_night " +
                         "FROM reservations r " +
                         "JOIN customers c ON r.customer_id = c.customer_id " +
                         "JOIN rooms rm ON r.room_id = rm.room_id " +
@@ -337,42 +353,20 @@ public class ReservationRepositoryImpl implements ReservationRepository {
     }
 
     @Override
-    public List<Reservation> searchReservations(String searchTerm) {
-        Connection connection = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        List<Reservation> reservations = new ArrayList<>();
+    public List<Reservation> searchReservations(String query) {
+        String searchQuery = "SELECT r FROM Reservation r " +
+                            "WHERE LOWER(r.customerName) LIKE LOWER(:query) " +
+                            "OR LOWER(r.roomNumber) LIKE LOWER(:query)";
         
         try {
-            connection = DBConnection.getInstance().getConnection();
-            String sql = "SELECT r.*, c.name as customer_name, rm.room_number " +
-                        "FROM reservations r " +
-                        "JOIN customers c ON r.customer_id = c.customer_id " +
-                        "JOIN rooms rm ON r.room_id = rm.room_id " +
-                        "WHERE c.name LIKE ? OR rm.room_number LIKE ? " +
-                        "ORDER BY r.check_in_date DESC";
-            stmt = connection.prepareStatement(sql);
-            String searchPattern = "%" + searchTerm + "%";
-            stmt.setString(1, searchPattern);
-            stmt.setString(2, searchPattern);
-            rs = stmt.executeQuery();
-            
-            while (rs.next()) {
-                reservations.add(extractReservationFromResultSet(rs));
-            }
-            
-        } catch (SQLException e) {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            Query<Reservation> hibernateQuery = session.createQuery(searchQuery, Reservation.class);
+            hibernateQuery.setParameter("query", "%" + query + "%");
+            return hibernateQuery.getResultList();
+        } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (stmt != null) stmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            return new ArrayList<>();
         }
-        
-        return reservations;
     }
 
     private Reservation extractReservationFromResultSet(ResultSet rs) throws SQLException {
@@ -393,6 +387,14 @@ public class ReservationRepositoryImpl implements ReservationRepository {
         // Additional display fields
         reservation.setCustomerName(rs.getString("customer_name"));
         reservation.setRoomNumber(rs.getString("room_number"));
+        
+        // Set room type and price
+        Room room = new Room();
+        room.setRoomId(rs.getInt("room_id"));
+        room.setRoomNumber(rs.getString("room_number"));
+        room.setRoomType(RoomType.valueOf(rs.getString("room_type")));
+        room.setPricePerNight(rs.getDouble("price_per_night"));
+        reservation.setRoom(room);
         
         return reservation;
     }

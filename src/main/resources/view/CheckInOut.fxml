@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.Region?>
+
+<AnchorPane prefHeight="720.0" prefWidth="920.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.icet.controller.CheckInOutController">
+    <VBox spacing="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="10" AnchorPane.bottomAnchor="10">
+        <Label text="Check-in / Check-out Management">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Label>
+        
+        <!-- Quick Actions Section -->
+        <HBox spacing="15.0" style="-fx-background-color: #f8f9fa; -fx-background-radius: 10;">
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+            
+            <VBox spacing="10.0" prefWidth="400.0">
+                <Label text="Quick Check-in">
+                    <font>
+                        <Font name="System Bold" size="16.0" />
+                    </font>
+                </Label>
+                
+                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                    <Label prefWidth="120.0" text="Reservation ID:">
+                        <font>
+                            <Font size="14.0" />
+                        </font>
+                    </Label>
+                    <TextField fx:id="checkInReservationField" prefHeight="30.0" prefWidth="150.0" promptText="Enter ID" />
+                    <Button fx:id="searchCheckInButton" mnemonicParsing="false" onAction="#handleSearchCheckIn" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #17a2b8;" text="Search" textFill="WHITE">
+                        <font>
+                            <Font name="System Bold" size="12.0" />
+                        </font>
+                    </Button>
+                </HBox>
+                
+                <Label fx:id="checkInDetailsLabel" wrapText="true" style="-fx-padding: 10;" />
+                
+                <Button fx:id="checkInButton" mnemonicParsing="false" onAction="#handleCheckIn" prefHeight="35.0" prefWidth="120.0" style="-fx-background-color: #28a745;" text="Check In" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Button>
+            </VBox>
+            
+            <Region prefWidth="20" />
+            
+            <VBox spacing="10.0" prefWidth="400.0">
+                <Label text="Quick Check-out">
+                    <font>
+                        <Font name="System Bold" size="16.0" />
+                    </font>
+                </Label>
+                
+                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                    <Label prefWidth="120.0" text="Reservation ID:">
+                        <font>
+                            <Font size="14.0" />
+                        </font>
+                    </Label>
+                    <TextField fx:id="checkOutReservationField" prefHeight="30.0" prefWidth="150.0" promptText="Enter ID" />
+                    <Button fx:id="searchCheckOutButton" mnemonicParsing="false" onAction="#handleSearchCheckOut" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #17a2b8;" text="Search" textFill="WHITE">
+                        <font>
+                            <Font name="System Bold" size="12.0" />
+                        </font>
+                    </Button>
+                </HBox>
+                
+                <Label fx:id="checkOutDetailsLabel" wrapText="true" style="-fx-padding: 10;" />
+                
+                <Button fx:id="checkOutButton" mnemonicParsing="false" onAction="#handleCheckOut" prefHeight="35.0" prefWidth="120.0" style="-fx-background-color: #dc3545;" text="Check Out" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Button>
+            </VBox>
+        </HBox>
+
+        <!-- Filter Section -->
+        <HBox spacing="10" style="-fx-background-color: #f8f9fa; -fx-background-radius: 10; -fx-padding: 10;">
+            <Label text="Filter Status:"/>
+            <ComboBox fx:id="filterStatusComboBox" prefWidth="150.0" promptText="All Reservations"/>
+            <Region HBox.hgrow="ALWAYS" />
+            <TextField fx:id="searchField" prefWidth="200.0" promptText="Search by name or room"/>
+            <Button fx:id="refreshButton" mnemonicParsing="false" onAction="#handleRefresh" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #17a2b8;" text="Refresh" textFill="WHITE">
+                <font>
+                    <Font name="System Bold" size="12.0" />
+                </font>
+            </Button>
+        </HBox>
+
+        <!-- Table Section -->
+        <TableView fx:id="reservationTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="idColumn" prefWidth="60.0" text="ID" />
+                <TableColumn fx:id="customerColumn" prefWidth="150.0" text="Customer" />
+                <TableColumn fx:id="roomColumn" prefWidth="100.0" text="Room" />
+                <TableColumn fx:id="checkInDateColumn" prefWidth="120.0" text="Check-in Date" />
+                <TableColumn fx:id="checkOutDateColumn" prefWidth="120.0" text="Check-out Date" />
+                <TableColumn fx:id="statusColumn" prefWidth="100.0" text="Status" />
+                <TableColumn fx:id="actionColumn" prefWidth="150.0" text="Actions" />
+            </columns>
+        </TableView>
+    </VBox>
+</AnchorPane> 

@@ -11,113 +11,112 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="720.0" prefWidth="920.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.icet.controller.CustomerManagementController">
-   <children>
-      <VBox layoutX="20.0" layoutY="20.0" prefHeight="680.0" prefWidth="880.0" spacing="20.0">
-         <children>
-            <HBox prefHeight="320.0" prefWidth="880.0" spacing="20.0">
-               <children>
-                  <VBox prefHeight="320.0" prefWidth="360.0" spacing="15.0" style="-fx-background-color: #f8f9fa; -fx-background-radius: 10;">
-                     <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                     </padding>
-                     <children>
-                        <Label text="Customer Details">
-                           <font>
-                              <Font name="System Bold" size="16.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="nameField" prefHeight="35.0" promptText="Full Name">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </TextField>
-                        <TextField fx:id="nicField" prefHeight="35.0" promptText="NIC Number">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </TextField>
-                        <TextField fx:id="emailField" prefHeight="35.0" promptText="Email">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </TextField>
-                        <TextField fx:id="phoneField" prefHeight="35.0" promptText="Phone Number">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </TextField>
-                        <TextField fx:id="addressField" prefHeight="35.0" promptText="Address">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </TextField>
-                        <HBox alignment="CENTER_RIGHT" prefWidth="360.0" spacing="10.0">
-                           <padding>
-                              <Insets top="10.0" />
-                           </padding>
-                           <children>
-                              <Button fx:id="clearButton" mnemonicParsing="false" onAction="#handleClear" prefHeight="35.0" prefWidth="100.0" style="-fx-background-color: #6c757d;" text="Clear" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="14.0" />
-                                 </font>
-                              </Button>
-                              <Button fx:id="saveButton" mnemonicParsing="false" onAction="#handleSave" prefHeight="35.0" prefWidth="100.0" style="-fx-background-color: #28a745;" text="Save" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="14.0" />
-                                 </font>
-                              </Button>
-                           </children>
-                        </HBox>
-                        <Label fx:id="messageLabel" alignment="CENTER" prefHeight="20.0" prefWidth="360.0" textFill="#d32f2f">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </VBox>
-                  <VBox prefHeight="320.0" prefWidth="500.0" spacing="10.0" style="-fx-background-color: #f8f9fa; -fx-background-radius: 10;">
-                     <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                     </padding>
-                     <children>
-                        <HBox alignment="CENTER_LEFT" prefWidth="460.0">
-                           <children>
-                              <Label text="Customer List">
-                                 <font>
-                                    <Font name="System Bold" size="16.0" />
-                                 </font>
-                              </Label>
-                              <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="380.0" spacing="10.0">
-                                 <children>
-                                    <TextField fx:id="searchField" prefHeight="30.0" prefWidth="200.0" promptText="Search by name or NIC">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </TextField>
-                                    <Button fx:id="refreshButton" mnemonicParsing="false" onAction="#handleRefresh" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #17a2b8;" text="Refresh" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="12.0" />
-                                       </font>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                           </children>
-                        </HBox>
-                        <TableView fx:id="customerTable" prefHeight="500.0" prefWidth="460.0">
-                           <columns>
-                              <TableColumn fx:id="idColumn" prefWidth="50.0" text="ID" />
-                              <TableColumn fx:id="nameColumn" prefWidth="120.0" text="Name" />
-                              <TableColumn fx:id="nicColumn" prefWidth="100.0" text="NIC" />
-                              <TableColumn fx:id="phoneColumn" prefWidth="100.0" text="Phone" />
-                              <TableColumn fx:id="actionColumn" prefWidth="100.0" text="Action" />
-                           </columns>
-                        </TableView>
-                     </children>
-                  </VBox>
-               </children>
-            </HBox>
-         </children>
+<AnchorPane prefHeight="720.0" prefWidth="920.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.icet.controller.CustomerManagementController">
+    <VBox spacing="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="10" AnchorPane.bottomAnchor="10">
+        <Label text="Customer Management">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Label>
+        
+        <!-- Form Section -->
+            <VBox spacing="15.0" style="-fx-background-color: #f8f9fa; -fx-background-radius: 10;">
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+
+         <Label text="Customer Details">
+            <font>
+                  <Font name="System Bold" size="16.0" />
+            </font>
+         </Label>
+
+         <HBox alignment="CENTER_LEFT" spacing="10.0">
+            <Label prefWidth="100.0" text="Full Name:">
+                  <font>
+                     <Font size="14.0" />
+                  </font>
+            </Label>
+            <TextField fx:id="nameField" prefHeight="30.0" prefWidth="250.0" promptText="Full Name" />
+         </HBox>
+
+         <HBox alignment="CENTER_LEFT" spacing="10.0">
+            <Label prefWidth="100.0" text="NIC Number:">
+                  <font>
+                     <Font size="14.0" />
+                  </font>
+            </Label>
+            <TextField fx:id="nicField" prefHeight="30.0" prefWidth="250.0" promptText="NIC Number" />
+         </HBox>
+
+         <HBox alignment="CENTER_LEFT" spacing="10.0">
+            <Label prefWidth="100.0" text="Email:">
+                  <font>
+                     <Font size="14.0" />
+                  </font>
+            </Label>
+            <TextField fx:id="emailField" prefHeight="30.0" prefWidth="250.0" promptText="Email" />
+         </HBox>
+
+         <HBox alignment="CENTER_LEFT" spacing="10.0">
+            <Label prefWidth="100.0" text="Phone:">
+                  <font>
+                     <Font size="14.0" />
+                  </font>
+            </Label>
+            <TextField fx:id="phoneField" prefHeight="30.0" prefWidth="250.0" promptText="Phone Number" />
+         </HBox>
+
+         <HBox alignment="CENTER_LEFT" spacing="10.0">
+            <Label prefWidth="100.0" text="Address:">
+                  <font>
+                     <Font size="14.0" />
+                  </font>
+            </Label>
+            <TextField fx:id="addressField" prefHeight="30.0" prefWidth="250.0" promptText="Address" />
+         </HBox>
+
+         <HBox alignment="CENTER_RIGHT" spacing="10.0">
+            <Button fx:id="clearButton" mnemonicParsing="false" onAction="#handleClear" prefHeight="35.0" prefWidth="100.0" style="-fx-background-color: #6c757d;" text="Clear" textFill="WHITE">
+                  <font>
+                     <Font name="System Bold" size="14.0" />
+                  </font>
+            </Button>
+            <Button fx:id="saveButton" mnemonicParsing="false" onAction="#handleSave" prefHeight="35.0" prefWidth="100.0" style="-fx-background-color: #28a745;" text="Save" textFill="WHITE">
+                  <font>
+                     <Font name="System Bold" size="14.0" />
+                  </font>
+            </Button>
+         </HBox>
+
+         <Label fx:id="messageLabel" alignment="CENTER" textFill="#d32f2f">
+            <font>
+                  <Font size="14.0" />
+            </font>
+         </Label>
       </VBox>
-   </children>
+
+
+        <!-- Search Section -->
+        <HBox spacing="10" style="-fx-background-color: #f8f9fa; -fx-background-radius: 10; -fx-padding: 10;">
+            <Label text="Search:"/>
+            <TextField fx:id="searchField" promptText="Search by name or NIC" HBox.hgrow="ALWAYS"/>
+            <Button fx:id="refreshButton" mnemonicParsing="false" onAction="#handleRefresh" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #17a2b8;" text="Refresh" textFill="WHITE">
+                <font>
+                    <Font name="System Bold" size="12.0" />
+                </font>
+            </Button>
+        </HBox>
+
+        <!-- Table Section -->
+        <TableView fx:id="customerTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="idColumn" prefWidth="50.0" text="ID" />
+                <TableColumn fx:id="nameColumn" prefWidth="200.0" text="Name" />
+                <TableColumn fx:id="nicColumn" prefWidth="120.0" text="NIC" />
+                <TableColumn fx:id="phoneColumn" prefWidth="120.0" text="Phone" />
+                <TableColumn fx:id="actionColumn" prefWidth="120.0" text="Action" />
+            </columns>
+        </TableView>
+    </VBox>
 </AnchorPane> 

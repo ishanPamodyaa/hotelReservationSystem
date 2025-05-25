@@ -1,7 +1,7 @@
 package edu.icet.Repocitory;
 
 import edu.icet.Model.Room;
-import edu.icet.Model.RoomType;
+import edu.icet.Utill.RoomType;
 import java.util.List;
 
 public interface RoomRepository {

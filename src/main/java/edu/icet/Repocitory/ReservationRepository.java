@@ -16,5 +16,5 @@ public interface ReservationRepository {
     List<Reservation> findByStatus(ReservationStatus status);
     List<Reservation> findByDateRange(LocalDate startDate, LocalDate endDate);
     boolean isRoomAvailable(int roomId, LocalDate checkIn, LocalDate checkOut);
-    List<Reservation> searchReservations(String searchTerm);
+    List<Reservation> searchReservations(String query);
 } 
