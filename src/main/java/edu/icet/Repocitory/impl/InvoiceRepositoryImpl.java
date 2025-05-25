@@ -255,6 +255,34 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
         
         return invoices;
     }
+    @Override
+    public boolean isAvailableReservationAtInvoice(int reservationId) {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+    
+        try {
+            connection = DBConnection.getInstance().getConnection();
+            String sql = "SELECT 1 FROM invoices WHERE reservation_id = ? LIMIT 1";
+            stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, reservationId);
+            rs = stmt.executeQuery();
+    
+            return rs.next(); // true if at least one row exists
+    
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
 
     @Override
     public List<Invoice> findByDateRange(LocalDate startDate, LocalDate endDate) {

@@ -238,7 +238,7 @@ public class DashboardController implements Initializable {
     @FXML
     void handleBillingAction(ActionEvent event) {
         setActiveButton(billingBtn);
-        loadContentPane("/view/Billing.fxml", "Billing / Invoicing");
+        loadContentPane("/view/BillingManagement.fxml", "Billing / Invoicing");
     }
 
     @FXML

@@ -13,6 +13,7 @@ public interface InvoiceRepository {
     Invoice findById(int id);
     List<Invoice> findAll();
     List<Invoice> findByReservationId(int reservationId);
+    boolean isAvailableReservationAtInvoice(int reservationId);
     List<Invoice> findByDateRange(LocalDate startDate, LocalDate endDate);
     List<Invoice> findByPaymentStatus(PaymentStatus status);
     boolean addInvoiceItem(InvoiceItem item);
