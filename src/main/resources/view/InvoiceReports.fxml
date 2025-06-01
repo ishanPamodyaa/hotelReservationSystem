@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<VBox spacing="20" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.icet.controller.InvoiceReportsController">
+    <padding>
+        <Insets bottom="20" left="20" right="20" top="20" />
+    </padding>
+
+    <Text style="-fx-font-size: 24; -fx-font-weight: bold;" text="Invoice Reports" />
+
+    <!-- Filter Section -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <ComboBox fx:id="statusFilter" promptText="Payment Status" prefWidth="150" />
+        <DatePicker fx:id="startDate" promptText="Start Date" />
+        <DatePicker fx:id="endDate" promptText="End Date" />
+        <TextField fx:id="searchField" promptText="Search by Invoice/Customer" prefWidth="200" />
+        <Button onAction="#handleSearch" text="Search" 
+                style="-fx-background-color: #0d6efd; -fx-text-fill: white;" />
+        <Button onAction="#handleReset" text="Reset" 
+                style="-fx-background-color: #6c757d; -fx-text-fill: white;" />
+    </HBox>
+
+    <!-- Invoices Table -->
+    <TableView fx:id="invoiceTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="invoiceIdColumn" text="Invoice #" prefWidth="100" />
+            <TableColumn fx:id="dateColumn" text="Date" prefWidth="120" />
+            <TableColumn fx:id="customerColumn" text="Customer" prefWidth="200" />
+            <TableColumn fx:id="roomColumn" text="Room" prefWidth="100" />
+            <TableColumn fx:id="totalAmountColumn" text="Total Amount" prefWidth="120" />
+            <TableColumn fx:id="statusColumn" text="Status" prefWidth="100" />
+            <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="150" />
+        </columns>
+    </TableView>
+
+    <!-- Summary and Actions -->
+    <HBox spacing="20" alignment="CENTER_RIGHT">
+        <Label text="Total Invoices:" />
+        <Label fx:id="totalInvoicesLabel" style="-fx-font-weight: bold;" />
+        <Label text="Total Amount:" />
+        <Label fx:id="totalAmountLabel" style="-fx-font-weight: bold;" />
+        <Button onAction="#handleDownloadAll" text="Download All as PDF" 
+                style="-fx-background-color: #198754; -fx-text-fill: white;" />
+        <Button onAction="#handleGenerateReport" text="Generate Summary Report" 
+                style="-fx-background-color: #0dcaf0; -fx-text-fill: white;" />
+    </HBox>
+</VBox> 

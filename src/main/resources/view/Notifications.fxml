@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="edu.icet.controller.NotificationsController"
+            prefHeight="600.0" prefWidth="800.0">
+    
+    <VBox spacing="20" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20" 
+          AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="20">
+        
+        <!-- Header -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Checkout Notifications" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="refreshBtn" text="Refresh" onAction="#handleRefresh"
+                    style="-fx-background-color: #0d6efd; -fx-text-fill: white;"/>
+            <Button fx:id="markAllReadBtn" text="Mark All as Read" onAction="#handleMarkAllRead"
+                    style="-fx-background-color: #198754; -fx-text-fill: white;"/>
+        </HBox>
+        
+        <!-- Filter Section -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <ComboBox fx:id="statusFilter" promptText="Filter by Status"/>
+            <DatePicker fx:id="dateFilter" promptText="Filter by Date"/>
+            <Button text="Apply Filters" onAction="#handleApplyFilters"
+                    style="-fx-background-color: #0d6efd; -fx-text-fill: white;"/>
+            <Button text="Reset" onAction="#handleResetFilters"
+                    style="-fx-background-color: #6c757d; -fx-text-fill: white;"/>
+        </HBox>
+        
+        <!-- Notifications Table -->
+        <TableView fx:id="notificationTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="dateTimeColumn" text="Date &amp; Time" prefWidth="150"/>
+                <TableColumn fx:id="roomColumn" text="Room" prefWidth="100"/>
+                <TableColumn fx:id="customerColumn" text="Customer" prefWidth="150"/>
+                <TableColumn fx:id="messageColumn" text="Message" prefWidth="250"/>
+                <TableColumn fx:id="statusColumn" text="Status" prefWidth="100"/>
+                <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="120"/>
+            </columns>
+        </TableView>
+        
+        <!-- Summary Section -->
+        <HBox spacing="20" alignment="CENTER_LEFT">
+            <Label fx:id="totalNotificationsLabel" text="Total Notifications: 0"/>
+            <Label fx:id="unreadNotificationsLabel" text="Unread: 0"/>
+        </HBox>
+        
+    </VBox>
+</AnchorPane> 

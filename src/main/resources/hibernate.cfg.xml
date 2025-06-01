@@ -6,9 +6,9 @@
     <session-factory>
         <!-- Database connection settings -->
         <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/hotel_reservation_db</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/hotel_reservation_sys</property>
         <property name="hibernate.connection.username">root</property>
-        <property name="hibernate.connection.password">1234</property>
+        <property name="hibernate.connection.password"></property>
 
         <!-- JDBC connection pool settings -->
         <property name="hibernate.c3p0.min_size">5</property>
@@ -18,7 +18,7 @@
         <property name="hibernate.c3p0.idle_test_period">3000</property>
 
         <!-- Specify dialect -->
-        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>
 
         <!-- Echo all executed SQL to stdout -->
         <property name="hibernate.show_sql">true</property>
@@ -27,10 +27,14 @@
         <!-- Drop and re-create the database schema on startup -->
         <property name="hibernate.hbm2ddl.auto">update</property>
 
-        <!-- Names the annotated entity classes -->
-        <mapping class="edu.icet.Model.Reservation"/>
-        <mapping class="edu.icet.Model.Room"/>
-        <mapping class="edu.icet.Model.Customer"/>
+        <!-- Enable current session context -->
+        <property name="current_session_context_class">thread</property>
+
+        <!-- Entity mappings -->
         <mapping class="edu.icet.Model.User"/>
+        <mapping class="edu.icet.Model.Customer"/>
+        <mapping class="edu.icet.Model.Room"/>
+        <mapping class="edu.icet.Model.Reservation"/>
+        <mapping class="edu.icet.Model.Invoice"/>
     </session-factory>
 </hibernate-configuration> 

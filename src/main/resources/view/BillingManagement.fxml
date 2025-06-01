@@ -97,7 +97,7 @@
             <DatePicker fx:id="endDatePicker" promptText="End Date" />
             <TextField fx:id="searchField" prefWidth="200" promptText="Search..." />
             <Button onAction="#handleRefresh" style="-fx-background-color: #0dcaf0; -fx-text-fill: white;" text="Refresh" />
-        </HBox>
+           </HBox>
 
         <TableView fx:id="invoiceTable" VBox.vgrow="ALWAYS">
             <columns>
