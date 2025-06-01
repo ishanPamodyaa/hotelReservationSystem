@@ -133,8 +133,8 @@ public class DashboardController implements Initializable {
     private void loadRoomStatistics(Connection conn) throws SQLException {
         String sql = "SELECT " +
                     "(SELECT COUNT(*) FROM rooms) as total_rooms, " +
-                    "(SELECT COUNT(*) FROM rooms WHERE status = 'AVAILABLE') as available_rooms, " +
-                    "(SELECT COUNT(*) FROM rooms WHERE status = 'OCCUPIED') as occupied_rooms";
+                    "(SELECT COUNT(*) FROM rooms WHERE status = 'Available') as available_rooms, " +
+                    "(SELECT COUNT(*) FROM rooms WHERE status != 'Available') as occupied_rooms";
         
         try (Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
@@ -159,9 +159,13 @@ public class DashboardController implements Initializable {
     }
     
     private void loadRecentReservations(Connection conn) throws SQLException {
-        String sql = "SELECT r.id, r.room_number, c.name, r.duration_days " +
+        String sql = "SELECT r.reservation_id, r.room_id, c.name, " +
+                    "DATEDIFF(r.check_out_date, r.check_in_date) as duration_days, " +
+                    "rm.room_number " +
                     "FROM reservations r " +
-                    "JOIN customers c ON r.customer_id = c.id " +
+                    "JOIN customers c ON r.customer_id = c.customer_id " +
+                    "JOIN rooms rm ON r.room_id = rm.room_id " +
+                    "WHERE r.status != 'Cancelled' " +
                     "ORDER BY r.created_at DESC LIMIT 3";
         
         try (Statement stmt = conn.createStatement();
@@ -170,7 +174,7 @@ public class DashboardController implements Initializable {
             recentReservationsContainer.getChildren().clear();
             while (rs.next()) {
                 String text = String.format("Reservation #%d - %s - Room %s - %d day(s)",
-                    rs.getInt("id"),
+                    rs.getInt("reservation_id"),
                     rs.getString("name"),
                     rs.getString("room_number"),
                     rs.getInt("duration_days"));
@@ -182,10 +186,12 @@ public class DashboardController implements Initializable {
     
     private void loadTodayCheckInOuts(Connection conn) throws SQLException {
         // Load Check-ins
-        String checkInSql = "SELECT r.id, c.name, r.room_number " +
+        String checkInSql = "SELECT r.reservation_id, c.name, rm.room_number " +
                           "FROM reservations r " +
-                          "JOIN customers c ON r.customer_id = c.id " +
-                          "WHERE DATE(check_in_date) = CURRENT_DATE " +
+                          "JOIN customers c ON r.customer_id = c.customer_id " +
+                          "JOIN rooms rm ON r.room_id = rm.room_id " +
+                          "WHERE DATE(r.check_in_date) = CURRENT_DATE " +
+                          "AND r.status = 'Confirmed' " +
                           "LIMIT 3";
         
         try (Statement stmt = conn.createStatement();
@@ -194,7 +200,7 @@ public class DashboardController implements Initializable {
             todayCheckInsContainer.getChildren().clear();
             while (rs.next()) {
                 String text = String.format("Check-in #%d - %s - Room %s",
-                    rs.getInt("id"),
+                    rs.getInt("reservation_id"),
                     rs.getString("name"),
                     rs.getString("room_number"));
                 Label label = createStyledLabel(text);
@@ -203,10 +209,12 @@ public class DashboardController implements Initializable {
         }
         
         // Load Check-outs
-        String checkOutSql = "SELECT r.id, c.name, r.room_number " +
+        String checkOutSql = "SELECT r.reservation_id, c.name, rm.room_number " +
                            "FROM reservations r " +
-                           "JOIN customers c ON r.customer_id = c.id " +
-                           "WHERE DATE(check_out_date) = CURRENT_DATE " +
+                           "JOIN customers c ON r.customer_id = c.customer_id " +
+                           "JOIN rooms rm ON r.room_id = rm.room_id " +
+                           "WHERE DATE(r.check_out_date) = CURRENT_DATE " +
+                           "AND r.status = 'CheckedIn' " +
                            "LIMIT 3";
         
         try (Statement stmt = conn.createStatement();
@@ -215,7 +223,7 @@ public class DashboardController implements Initializable {
             todayCheckOutsContainer.getChildren().clear();
             while (rs.next()) {
                 String text = String.format("Check-out #%d - %s - Room %s",
-                    rs.getInt("id"),
+                    rs.getInt("reservation_id"),
                     rs.getString("name"),
                     rs.getString("room_number"));
                 Label label = createStyledLabel(text);
@@ -225,18 +233,31 @@ public class DashboardController implements Initializable {
     }
     
     private void loadRecentActivities() {
-        List<Notification> recentNotifications = notificationRepository.findAll();
-        recentActivitiesContainer.getChildren().clear();
-        
-        recentNotifications.stream()
-            .limit(3)
-            .forEach(notification -> {
-                String text = String.format("%s - %s",
-                    notification.getMessage(),
-                    notification.getDateTime().format(formatter));
-                Label label = createStyledLabel(text);
-                recentActivitiesContainer.getChildren().add(label);
-            });
+        try (Connection conn = DBConnection.getInstance().getConnection()) {
+            String sql = "SELECT al.*, u.username " +
+                        "FROM activity_logs al " +
+                        "JOIN users u ON al.user_id = u.user_id " +
+                        "ORDER BY al.action_timestamp DESC " +
+                        "LIMIT 3";
+                        
+            try (Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery(sql)) {
+                
+                recentActivitiesContainer.getChildren().clear();
+                while (rs.next()) {
+                    String text = String.format("%s - %s",
+                        rs.getString("action_description"),
+                        rs.getTimestamp("action_timestamp").toLocalDateTime().format(formatter));
+                    Label label = createStyledLabel(text);
+                    recentActivitiesContainer.getChildren().add(label);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Label errorLabel = new Label("Error loading activities");
+            errorLabel.setStyle("-fx-text-fill: red;");
+            recentActivitiesContainer.getChildren().setAll(errorLabel);
+        }
     }
     
     private Label createStyledLabel(String text) {
